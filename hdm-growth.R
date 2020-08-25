@@ -41,6 +41,6 @@ orthoML( x=X, d=d, y=y, nfold=5)$coef # -0.0657
 
 
 # As a test custom double selection
-double.selection(x=X,y=y,d=d, method="hdm")[1]
-double.selection(x=X,y=y,d=d, method="gamlr")[1]
+double_selection(x=X,y=y,d=d, method="hdm")[1]
+double_selection(x=X,y=y,d=d, method="gamlr")[1]
 

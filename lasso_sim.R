@@ -3,76 +3,76 @@ example = function() {
   beta.e = 2
   # If everything is fairly sparse, it all seems to work
   # including normal gamlr lasso
-  lasso.mc(beta.e = beta.e, Kc=5,Ke=5,Ky=5,  Ku=500, n=500)
+  lasso_sim(beta.e = beta.e, Kc=5,Ke=5,Ky=5,  Ku=500, n=500)
 
   # Make uniformely less sparse
-  lasso.mc(beta.e = beta.e,Kc=50,Ke=50,Ky=50,  Ku=500, n=500)
+  lasso_sim(beta.e = beta.e,Kc=50,Ke=50,Ky=50,  Ku=500, n=500)
   # gamlr still works somewhat but double selection and oml break down
   
   # Just add a lot of exogenous variables
-  lasso.mc(beta.e = beta.e,Kc=5,Ke=50,Ky=5,  Ku=400, n=500)
+  lasso_sim(beta.e = beta.e,Kc=5,Ke=50,Ky=5,  Ku=400, n=500)
   
   # Just add a lot of confounders: gamlr works worst
-  lasso.mc(beta.e = beta.e,Kc=50,Ke=5,Ky=5,  Ku=400, n=500)
+  lasso_sim(beta.e = beta.e,Kc=50,Ke=5,Ky=5,  Ku=400, n=500)
   
   # Just add a lot of variables that just affect y
-  lasso.mc(beta.e = beta.e,Kc=5,Ke=5,Ky=50,  Ku=400, n=500)
+  lasso_sim(beta.e = beta.e,Kc=5,Ke=5,Ky=50,  Ku=400, n=500)
   
 
   beta.e = 2
   # If everything is fairly sparse, it all seems to work
   # including normal gamlr lasso
-  lasso.mc(beta.e = beta.e, Kc=5,Ke=5,Ky=5,  Ku=500, n=500)
+  lasso_sim(beta.e = beta.e, Kc=5,Ke=5,Ky=5,  Ku=500, n=500)
   
   # Make uniformely less sparse
-  lasso.mc(beta.e = beta.e,Kc=50,Ke=50,Ky=50,  Ku=500, n=500)
-  lasso.mc(beta.e = beta.e,Kc=50,Ke=50,Ky=50,  Ku=500, n=500)
+  lasso_sim(beta.e = beta.e,Kc=50,Ke=50,Ky=50,  Ku=500, n=500)
+  lasso_sim(beta.e = beta.e,Kc=50,Ke=50,Ky=50,  Ku=500, n=500)
   # gamlr still works somewhat but double selection and oml break down
   
   # Just add a lot of exogenous variables
-  lasso.mc(beta.e = beta.e,Kc=5,Ke=50,Ky=5,  Ku=400, n=500)
+  lasso_sim(beta.e = beta.e,Kc=5,Ke=50,Ky=5,  Ku=400, n=500)
 
   # Just add a lot of variables that just affect y
-  lasso.mc(beta.e = beta.e,Kc=5,Ke=5,Ky=50,  Ku=400, n=500)
+  lasso_sim(beta.e = beta.e,Kc=5,Ke=5,Ky=50,  Ku=400, n=500)
   
     
   # Just add a lot of confounders: gamlr works worst if sd.x is small
-  lasso.mc(beta.e = beta.e,Kc=50,Ke=5,Ky=5,  Ku=400, n=500)
-  lasso.mc(beta.e = beta.e,sd.d=5,Kc=50,Ke=5,Ky=5,  Ku=400, n=500)
-  lasso.mc(beta.e = beta.e,sd.d=1,sd.beta=4,Kc=50,Ke=5,Ky=5,  Ku=400, n=500)
+  lasso_sim(beta.e = beta.e,Kc=50,Ke=5,Ky=5,  Ku=400, n=500)
+  lasso_sim(beta.e = beta.e,sd.d=5,Kc=50,Ke=5,Ky=5,  Ku=400, n=500)
+  lasso_sim(beta.e = beta.e,sd.d=1,sd.beta=4,Kc=50,Ke=5,Ky=5,  Ku=400, n=500)
   
   # Just add a lot of confounders: gamlr works worst if sd.x is small
-  lasso.mc(beta.e = 1,sd.d = 1,Kc=50,Ke=5,Ky=50,  Ku=400, n=500)
-  lasso.mc(beta.e = 1,sd.d = 1,sd.beta=4,Kc=50,Ke=5,Ky=50,  Ku=400, n=500)
-  lasso.mc(beta.e = 1,sd.d = 10,Kc=50,Ke=1,Ky=50,  Ku=400, n=500)
+  lasso_sim(beta.e = 1,sd.d = 1,Kc=50,Ke=5,Ky=50,  Ku=400, n=500)
+  lasso_sim(beta.e = 1,sd.d = 1,sd.beta=4,Kc=50,Ke=5,Ky=50,  Ku=400, n=500)
+  lasso_sim(beta.e = 1,sd.d = 10,Kc=50,Ke=1,Ky=50,  Ku=400, n=500)
   
   # Just add a lot of confounders: gamlr works worst
-  lasso.mc(beta.e = beta.e,beta.cx = 5,Kc=50,Ke=5,Ky=50,  Ku=400, n=500)
+  lasso_sim(beta.e = beta.e,beta.cx = 5,Kc=50,Ke=5,Ky=50,  Ku=400, n=500)
   
   
     
   # Normal lasso with gamlr works very well but hdm not
   
-  lasso.mc(beta.d = 1,beta.e = 1.5,beta.y = 1,Kc=50,Ke=50,Ky=50,  Ku=400, n=500)
+  lasso_sim(beta.d = 1,beta.e = 1.5,beta.y = 1,Kc=50,Ke=50,Ky=50,  Ku=400, n=500)
   
   
-  lasso.mc(beta.d = 1,beta.e = 0.8,beta.y = 1,Kc=5,Ke=5,Ky=5,  Ku=400, n=500)
+  lasso_sim(beta.d = 1,beta.e = 0.8,beta.y = 1,Kc=5,Ke=5,Ky=5,  Ku=400, n=500)
   
   
   # Where does hdm work better than gamlr?
-  lasso.mc(beta.d = 1,beta.e = 0,beta.y = 1.5,sd.d = 10,Kc=30,Ke=1,Ky=500,  Ku=500, n=600)
+  lasso_sim(beta.d = 1,beta.e = 0,beta.y = 1.5,sd.d = 10,Kc=30,Ke=1,Ky=500,  Ku=500, n=600)
   
-  lasso.mc(beta.d = 1,beta.e = 0,beta.y = 1.5,sd.d = 10,Kc=30,Ke=1,Ky=500,  Ku=500, n=2000)
+  lasso_sim(beta.d = 1,beta.e = 0,beta.y = 1.5,sd.d = 10,Kc=30,Ke=1,Ky=500,  Ku=500, n=2000)
 
   
   library(sktools)
-  sim = simulation.study(lasso.mc, par=list(beta.d = 1,beta.e = 1.5,beta.y = 1,Kc=50,Ke=50,Ky=50,  Ku=400, n=500), repl=100)  
+  sim = simulation.study(lasso_sim, par=list(beta.d = 1,beta.e = 1.5,beta.y = 1,Kc=50,Ke=50,Ky=50,  Ku=400, n=500), repl=100)  
 
   # Much more sparsity
-  sim3 = simulation.study(lasso.mc, par=list(beta.d = 1,beta.e = 1.5,beta.y = 1,Kc=50,Ke=50,Ky=50,  Ku=1000, n=500), repl=50)  
+  sim3 = simulation.study(lasso_sim, par=list(beta.d = 1,beta.e = 1.5,beta.y = 1,Kc=50,Ke=50,Ky=50,  Ku=1000, n=500), repl=50)  
   
     
-  sim2 = simulation.study(lasso.mc, par=list(beta.d = 1,beta.e = 0,beta.y = 1.5,sd.d = 10,Kc=30,Ke=1,Ky=500,  Ku=500, n=600), repl=50)  
+  sim2 = simulation.study(lasso_sim, par=list(beta.d = 1,beta.e = 0,beta.y = 1.5,sd.d = 10,Kc=30,Ke=1,Ky=500,  Ku=500, n=600), repl=50)  
 
   #saveRDS(sim3, "lasso_sim_3.Rds")
   
@@ -101,7 +101,7 @@ example = function() {
 }
 
 
-lasso.mc = function(
+lasso_sim = function(
   n = 500,
   K = 500,
   Kc = round(K/4),
@@ -124,7 +124,7 @@ lasso.mc = function(
   
 ) {
   library(restorepoint); library(dplyr)
-  restore.point("lasso.mc")
+  restore.point("lasso_sim")
   
   K.vec = c(Kc=Kc, Ke=Ke,Ku=Ku,Ky=Ky)
   Xc = rnorm(Kc*n, 0, sd.xc) %>% matrix(nrow=n) 
@@ -181,7 +181,7 @@ lasso.mc = function(
     c(vs,vs1,vs2)
   }))
   
-  cbind(quick.df(
+  cbind(quick_df(
     model = names(models),
     coef = coefs,  
     ols.short = beta.ols.short
@@ -211,7 +211,7 @@ estimate_lasso_sim_model = function(model, d,y,X,dX, details = TRUE) {
     list(coef = coefs[1], vars = names(coefs)[-1], vars1=NULL, vars2=names(coefs)[-1])
   } else if (model$type == "ds") {
     args = c(list(d=d,x=X,y=y,lasso.method = model$lasso, just.d.coef = TRUE), model$args)
-    res = do.call(double.selection, args)
+    res = do.call(double_selection, args)
   } else {
     stop(paste0("Model type ", model$type ," not known. So far only model types ds and free_pl are implemented."))
   }

@@ -1,4 +1,50 @@
-double.selection = function(d,x,y,..., lasso.method=c("rlasso","gamlr")[1],dvar="d", keep.intercept=FALSE, just.d.coef = FALSE) {
+library(hdm)
+library(gamlr)
+library(restorepoint)
+library(dplyr)
+
+
+# Return non-zero lasso coefficients
+lasso_coef = function(lasso,..., keep.intercept=FALSE) {
+  restore.point("lasso_coef")
+  if (is(lasso,"rlasso")) {
+    co = coef(lasso)
+    if (!keep.intercept) {
+      if (names(co)[1]=="(Intercept)") co = co[-1]
+      co = co[co!=0]
+      return(co)
+    }
+  } else if (is(lasso, "cv.glmnet")) {
+    co = as.matrix(coef(lasso, s = "lambda.min"))
+    
+  } else if (is(lasso,"glmnet")) {
+    stop("Not yet implemented for glmnet. Please call cv.glmnet.")
+  } else if (is(lasso, "gamlr")) {
+    co = as.matrix(coef(lasso,...))
+  }
+  rows = co[,1] != 0
+  rows[1] = keep.intercept
+  rows
+  co = co[rows,]
+  co  
+}
+
+# Get the (non-zero) post lasso coefficients
+post_lasso_coef = function(lasso, x,y, add.var=NULL, keep.intercept=FALSE) {
+  restore.point("post_lasso_coef")
+  co = lasso_coef(lasso)
+  vars = unique(c(add.var,names(co)))
+  x = as.matrix(x[,vars])
+  reg = lm.fit(x = cbind(1,x),y=y)
+  co = coef(reg)
+  if (!keep.intercept) co = co[-1]
+  co
+}
+
+
+# Perform double selection lasso
+# similar to hdm::rlassoEffects 
+double_selection = function(d,x,y,..., lasso.method=c("rlasso","gamlr")[1],dvar="d", keep.intercept=FALSE, just.d.coef = FALSE) {
   args = list(...)
   if (lasso.method == "rlasso") {
     library(hdm)
@@ -9,7 +55,7 @@ double.selection = function(d,x,y,..., lasso.method=c("rlasso","gamlr")[1],dvar=
     lasso1 = gamlr(x=x,y=d,...)
     lasso2 = gamlr(x=x,y=y,...)
   }
-  restore.point("double.selection")
+  restore.point("double_selection")
   vars1 = names(lasso_coef(lasso1)) 
   vars2 = names(lasso_coef(lasso2))
   vars = union(vars1,vars2)
@@ -56,43 +102,10 @@ glmnet.free = function(x,y,free=NULL, ...) {
   }
 }
 
-# Return non-zero lasso coefficients
-lasso_coef = function(lasso,..., keep.intercept=FALSE) {
-  restore.point("lasso_coef")
-  if (is(lasso,"rlasso")) {
-    co = coef(lasso)
-    if (!keep.intercept) {
-      if (names(co)[1]=="(Intercept)") co = co[-1]
-      co = co[co!=0]
-      return(co)
-    }
-  } else if (is(lasso, "cv.glmnet")) {
-    co = as.matrix(coef(lasso, s = "lambda.min"))
-    
-  } else if (is(lasso,"glmnet")) {
-    stop("Not yet implemented for glmnet. Please call cv.glmnet.")
-  } else if (is(lasso, "gamlr")) {
-    co = as.matrix(coef(lasso,...))
-  }
-  rows = co[,1] != 0
-  rows[1] = keep.intercept
-  rows
-  co = co[rows,]
-  co  
-}
-
-post_lasso_coef = function(lasso, X,y, add.var=NULL, keep.intercept=FALSE) {
-  restore.point("post_lasso_coef")
-  co = lasso_coef(lasso)
-  vars = unique(c(add.var,names(co)))
-  X = as.matrix(X[,vars])
-  reg = lm.fit(x = cbind(1,X),y=y)
-  co = coef(reg)
-  if (!keep.intercept) co = co[-1]
-  co
-}
-
-with.random.seed = function(expr, seed = 1234567890) 
+# Call an expression with a specific random seed and 
+# afterwards restore the previous state of the
+# pseudo-random number generator
+with_random_seed = function(expr, seed = 1234567890) 
 {
   old.seed = get(".Random.seed", .GlobalEnv)
   set.seed(seed)
@@ -102,6 +115,6 @@ with.random.seed = function(expr, seed = 1234567890)
   return(ret)
 }
 
-quick.df = function(...) {
+quick_df = function(...) {
   as_tibble(list(...))
 }
