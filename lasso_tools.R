@@ -21,6 +21,8 @@ lasso_coef = function(lasso,..., keep.intercept=FALSE) {
     stop("Not yet implemented for glmnet. Please call cv.glmnet.")
   } else if (is(lasso, "gamlr")) {
     co = as.matrix(coef(lasso,...))
+  } else {
+    stop("Invalid lasso object passed. It must be the return value of gamlr, rlasso, glmnet or cv.glmnet.")
   }
   rows = co[,1] != 0
   rows[1] = keep.intercept
@@ -41,21 +43,20 @@ post_lasso_coef = function(lasso, x,y, add.var=NULL, keep.intercept=FALSE) {
   co
 }
 
-
 # Perform double selection lasso
 # similar to hdm::rlassoEffects 
-double_selection = function(d,x,y,..., lasso.method=c("rlasso","gamlr")[1],dvar="d", keep.intercept=FALSE, just.d.coef = FALSE) {
+double_selection = function(d,x,y,..., lasso.fun=c("rlasso","gamlr")[1],dvar="d", keep.intercept=FALSE, just.d.coef = FALSE) {
   args = list(...)
-  if (lasso.method == "rlasso") {
+  if (lasso.fun == "rlasso") {
     library(hdm)
     lasso1 = rlasso(x=x,y=d,...)
     lasso2 = rlasso(x=x,y=y,...)
-  } else if (lasso.method=="gamlr") {
+  } else if (lasso.fun=="gamlr") {
     library(gamlr)
     lasso1 = gamlr(x=x,y=d,...)
     lasso2 = gamlr(x=x,y=y,...)
   }
-  restore.point("double_selection")
+  #restore.point("double_selection")
   vars1 = names(lasso_coef(lasso1)) 
   vars2 = names(lasso_coef(lasso2))
   vars = union(vars1,vars2)

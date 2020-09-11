@@ -1,2 +1,3 @@
-# lassoEffectSim
- Simulation study: causal effects estimation with lasso variants
+Author: Sebastian Kranz, Ulm University
+
+Code files and simulated data for my blog entry "Lasso and the Methods of Causality"
