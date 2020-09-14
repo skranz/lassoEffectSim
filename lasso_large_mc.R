@@ -67,10 +67,50 @@ lasso.sel.sim = function() {
   sim = bind_rows(li)
   saveRDS(sim, "lasso_sel_sim.Rds")
   
-  sim %>% 
+  sim %>%
     group_by(model) %>%
-    summarize()
+    summarize(
+      bias = mean(coef-1),
+      se = sd(coef)
+    )
   library(ggplot2)
+  ggplot(sim, aes(x=coef,fill=model)) + geom_density() +
+    facet_wrap(~model, scales="free_y")  
+}
+
+
+# Takes very long to run
+lasso.sel.sim = function() {
+  source("lasso_tools.R")
+  source("lasso_sim.R")
+  
+  models1 = lasso_sim_default_models(names=c("gamlr_simple","rlasso_double_sel"))
+  
+  models2 = list(
+    rlasso_double_sel_c106 = list(lasso.fun="rlasso",type="double_sel", args=list(penalty=list(c=1.06))),
+    rlasso_double_sel_c100 = list(lasso.fun="rlasso",type="double_sel", args=list(penalty=list(c=1)))    
+  )
+  
+  models = c(models1, models2)
+  library(dplyr)
+  li = replicate(n=1000, lasso_sim(alpha=1,n=100,Kc=10,Ke=10,Ky=5,Ku=20, beta.ed = 10, beta.ey = 0.5, beta.cd = 0.5, beta.cy = 10, models=c("gamlr_simple","rlasso_double_sel"))
+                 ,simplify = FALSE)
+  
+  sim = bind_rows(li)
+  saveRDS(sim, "lasso_sim3.Rds")
+  
+  sim = readRDS("lasso_sim3.Rds")
+  sim %>%
+    group_by(model) %>%
+    summarize(
+      bias = mean(coef-1),
+      se = sd(coef),
+      num.vars = mean(num.vars),
+      xe = mean(xe),
+      xc = mean(xc)
+    )  
+  library(ggplot2)
+  
   ggplot(sim, aes(x=coef,fill=model)) + geom_density() +
     facet_wrap(~model, scales="free_y")  
 }
